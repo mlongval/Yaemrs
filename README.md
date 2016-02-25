@@ -70,29 +70,29 @@ This software is licensed under the [GNU GPLv3](http://www.gnu.org/licenses/gpl.
 
     9. Database Layout
 
-        db_root_dir                                          <=== DB main directory<BR>
-        ├── patients_data_dir                                <=== where all patient subdirs are kept<BR>
-        │   └── Lastname.Firstname.LASF14123101.99999.CMRF   <=== an individual patient subdir<BR>
-        ├── temp                                             <=== temporary files go here<BR>
-        ├── appointments                                     <=== db level appointment data here<BR>
-        └── billing                                          <=== db level billing data here<BR>
+            db_root_dir                                      <=== DB main directory<BR>
+            ├── patients_data_dir                            <=== where all patient subdirs are kept<BR>
+            │   └── Lastname.Firstname.LASF14123101.99999.CMRF <=== an individual patient subdir<BR>
+            ├── temp                                         <=== temporary files go here<BR>
+            ├── appointments                                 <=== db level appointment data here<BR>
+            └── billing                                      <=== db level billing data here<BR>
 
     10. Individual Patient Directory Layout
 
-        Lastname.Firstname.LASF14123101.99999.CMRF          <=== directory name is Patient UID<BR>
-        ├── atcd.yaml                                       <=== patient antecedants file<BR>
-        ├── contact.yaml                                    <=== contanct and demographic data<BR>
-        ├── docs                                            <=== scanned documents and relevant data<BR>
-        │   └── scanned_doc.pdf<BR>
-        ├── meds.yaml                                       <=== medication list<BR>
-        └── notes                                           <=== clinical notes subdir<BR>
-            └── 28.08.2015.note                             <=== note for 28.08.2015 (dd.mm.yyyy)<BR>
+            Lastname.Firstname.LASF14123101.99999.CMRF      <=== directory name is Patient UID<BR>
+            ├── atcd.yaml                                   <=== patient antecedants file<BR>
+            ├── contact.yaml                                <=== contanct and demographic data<BR>
+            ├── docs                                        <=== scanned documents and relevant data<BR>
+            │   └── scanned_doc.pdf<BR>
+            ├── meds.yaml                                   <=== medication list<BR>
+            └── notes                                       <=== clinical notes subdir<BR>
+                └── 28.08.2015.note                         <=== note for 28.08.2015 (dd.mm.yyyy)<BR>
 
-        Patient UID (Unique Identifier) format:
+            Patient UID (Unique Identifier) format:
 
-        Lastname                                            <=== patient's last name (alpha only)<BR>
-        Firstname                                           <=== patient's first name (alpha only)<BR>
-        LASF14123101                                        <=== *Québec RAMQ format HIN<BR>
+            Lastname                                        <=== patient's last name (alpha only)<BR>
+            Firstname                                       <=== patient's first name (alpha only)<BR>
+            LASF14123101                                    <=== *Québec RAMQ format HIN<BR>
 
             LASF: first 3 letters of Lastname (LAS) + first letter of Firstname (F)<BR>
             141231: DOB (YYMMDD) (50 will be added to MM if it is a woman<BR>
