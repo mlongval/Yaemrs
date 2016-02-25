@@ -102,12 +102,12 @@ This software is licensed under the [GNU GPLv3](http://www.gnu.org/licenses/gpl.
                 who are born on the same day and have the same first 4 letters of the ID<BR>
                 which are the same. The first registered would be 01, the second 02)<BR>
 
-        99999: is the chart number at the primary clinic for this patient. (no upper limit, digits
-               only)<BR>
-        CMRF: is the abbreviation for the primary clinic for this patient. (user defined)<BR>
+            99999: is the chart number at the primary clinic for this patient. (no upper limit, digits
+                   only)<BR>
+            CMRF: is the abbreviation for the primary clinic for this patient. (user defined)<BR>
 
-        * The province of Québec public health insurance (RAMQ - Régie de l'Assurance Maladie du
-        Québec) standard HIN (Health insurance number) for each citizen of the province.<BR>
+            * The province of Québec public health insurance (RAMQ - Régie de l'Assurance Maladie du
+            Québec) standard HIN (Health insurance number) for each citizen of the province.<BR>
 
 4. Configuration
 
