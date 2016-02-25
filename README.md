@@ -70,44 +70,44 @@ This software is licensed under the [GNU GPLv3](http://www.gnu.org/licenses/gpl.
 
     9. Database Layout
 
-       db_root_dir                                          <=== DB main directory
-       ├── patients_data_dir                                <=== where all patient subdirs are kept
-       │   └── Lastname.Firstname.LASF14123101.99999.CMRF   <=== an individual patient subdir
-       ├── temp                                             <=== temporary files go here
-       ├── appointments                                     <=== db level appointment data here
-       └── billing                                          <=== db level billing data here
+        db_root_dir                                          <=== DB main directory<BR>
+        ├── patients_data_dir                                <=== where all patient subdirs are kept<BR>
+        │   └── Lastname.Firstname.LASF14123101.99999.CMRF   <=== an individual patient subdir<BR>
+        ├── temp                                             <=== temporary files go here<BR>
+        ├── appointments                                     <=== db level appointment data here<BR>
+        └── billing                                          <=== db level billing data here<BR>
 
     10. Individual Patient Directory Layout
 
-        Lastname.Firstname.LASF14123101.99999.CMRF          <=== directory name is Patient UID
-        ├── atcd.yaml                                       <=== patient antecedants file
-        ├── contact.yaml                                    <=== contanct and demographic data
-        ├── docs                                            <=== scanned documents and relevant data
-        │   └── scanned_doc.pdf
-        ├── meds.yaml                                       <=== medication list
-        └── notes                                           <=== clinical notes subdir
-            └── 28.08.2015.note                             <=== note for 28.08.2015 (dd.mm.yyyy)
+        Lastname.Firstname.LASF14123101.99999.CMRF          <=== directory name is Patient UID<BR>
+        ├── atcd.yaml                                       <=== patient antecedants file<BR>
+        ├── contact.yaml                                    <=== contanct and demographic data<BR>
+        ├── docs                                            <=== scanned documents and relevant data<BR>
+        │   └── scanned_doc.pdf<BR>
+        ├── meds.yaml                                       <=== medication list<BR>
+        └── notes                                           <=== clinical notes subdir<BR>
+            └── 28.08.2015.note                             <=== note for 28.08.2015 (dd.mm.yyyy)<BR>
 
         Patient UID (Unique Identifier) format:
 
-        Lastname                                            <=== patient's last name (alpha only)
-        Firstname                                           <=== patient's first name (alpha only)
-        LASF14123101                                        <=== *Québec RAMQ format HIN
+        Lastname                                            <=== patient's last name (alpha only)<BR>
+        Firstname                                           <=== patient's first name (alpha only)<BR>
+        LASF14123101                                        <=== *Québec RAMQ format HIN<BR>
 
-            LASF: first 3 letters of Lastname (LAS) + first letter of Firstname (F)
-            141231: DOB (YYMMDD) (50 will be added to MM if it is a woman
-                    so a man born on 141231 would have the value 141231
-                    while a woman would have 146231)
-            01: (the last 2 digits are an administrative identifier to distinguish 2 people
-                who are born on the same day and have the same first 4 letters of the ID
-                which are the same. The first registered would be 01, the second 02)
+            LASF: first 3 letters of Lastname (LAS) + first letter of Firstname (F)<BR>
+            141231: DOB (YYMMDD) (50 will be added to MM if it is a woman<BR>
+                    so a man born on 141231 would have the value 141231<BR>
+                    while a woman would have 146231)<BR>
+            01: (the last 2 digits are an administrative identifier to distinguish 2 people<BR>
+                who are born on the same day and have the same first 4 letters of the ID<BR>
+                which are the same. The first registered would be 01, the second 02)<BR>
 
         99999: is the chart number at the primary clinic for this patient. (no upper limit, digits
-               only)
-        CMRF: is the abbreviation for the primary clinic for this patient. (user defined)
+               only)<BR>
+        CMRF: is the abbreviation for the primary clinic for this patient. (user defined)<BR>
 
         * The province of Québec public health insurance (RAMQ - Régie de l'Assurance Maladie du
-        Québec) standard HIN (Health insurance number) for each citizen of the province.
+        Québec) standard HIN (Health insurance number) for each citizen of the province.<BR>
 
 4. Configuration
 
