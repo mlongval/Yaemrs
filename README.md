@@ -6,7 +6,7 @@ This software is licensed under the [GNU GPLv3](http://www.gnu.org/licenses/gpl.
 0. Preamble
     Please note that this is alpha quality. While I do actually use a version of this software in 
     my everyday practice, it is still not "production ready" unless you are the dev. There are a lot of things
-    that need fixing. And a lot of features that are not implemented.
+    that need fixing. And a lot of features that are not implemented.<BR><BR>
 
 1. Purpose (Requirements)<br>
 
