@@ -1,0 +1,31 @@
+Things to do:
+(*** Very important, ** Medium importance, * Regular importance)
+
+*** Fix printing of notes
+    As of 15.01.2016 I am not able to print notes
+
+*** Create new note for today
+    As of 15.01.2016 → I cannot create new note for today
+
+*** Shutdown option to offer to unmount the data directory
+
+*** Fix interface
+
+**  Change configuration from config.ini to Python or YAML
+
+*   Put it on Github
+
+*   Remove un-needed files
+
+*   Remove useless commented out print() statements.
+
+
+Done or resolved:
+
+--- Startup check for presence of data directory and option to mount it
+    On Mac this should check for the existence of the .img file and
+    then ask if I want to have it mounted.
+    ==> 25.02.2016 Finally I decided that it was best to remove the mounting part
+    from Yaemrs. The program just points to the directory with the data, that's it.
+    Mounting and securing the data will not be part of it for now because it's too variable
+    from Mac to Linux.
