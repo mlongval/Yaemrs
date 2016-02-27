@@ -5,6 +5,7 @@ import subprocess
 import database_yaemrs as database
 import support_yaemrs as support
 from support_yaemrs import obligatory_input as oinput
+from support_yaemrs import print_bold
 import patient_yaemrs as pObj
 from pprint import pprint
 from collections import OrderedDict
@@ -14,10 +15,10 @@ from datetime import datetime
 yaemrs_version = "0.01alpha"
 yaemrs_version_date = "21.10.2015"
 
-INTRODUCTION_MESSAGE = """
+INTRODUCTION_MESSAGE = support.bold_str("""
 YAEMRS (Yet Another Electronic Medical Record System)
 Version: {0} ({1})
-""".format(yaemrs_version, yaemrs_version_date)
+""".format(yaemrs_version, yaemrs_version_date))
 
 class CommandShell(cmd.Cmd):
     """Abstraction to add a few class variables"""
@@ -67,28 +68,25 @@ class MainShell(CommandShell):
     """Yaemrs command shell"""
 
     # class global constants go here
-    PLAIN_PROMPT = " > "
+    PLAIN_PROMPT = support.bold_str(" > ")
 
-    MAIN_SHELL_TEXT = ("""
-    Database commands:
-
-    dbinfo    (show information about the database)
-    new       (create a new patient)
-    select    (select patient in database using 'pattern')
-    list      (list all patients in database)
-
-    exit
-
-    Patient actions (act upon selected patient):
-
-    edit      (edit the currently selected patient's chart)
-    print     (print from patient's chart)
-    clip      (clip from patient's chart)
-
-    Other commands:
-
-    clear     (clear screen)
-    """)
+    MAIN_SHELL_TEXT = support.bold_str("Database commands:") + \
+                      """
+                      dbinfo    (show information about the database)
+                      new       (create a new patient)
+                      select    (select patient in database using 'pattern')
+                      list      (list all patients in database)
+                      exit """ + "\n\n" + \
+                      support.bold_str("Patient actions (act upon selected patient):") + \
+                      """
+                      edit      (edit the currently selected patient's chart)
+                      print     (print from patient's chart)
+                      clip      (clip from patient's chart)
+                      """ + "\n" + \
+                      support.bold_str("Other commands: ") + \
+                      """
+                      cls       (clear screen)
+                      """
 
     # CLASS GLOBAL VARIABLES GO HERE
 
@@ -116,7 +114,8 @@ class MainShell(CommandShell):
 
     def do_list(self, pattern):
         """Show a list of patients in the database matching 'pattern'"""
-        if pattern == "": pattern = "*" #bug in cmd loop
+        if pattern == "": pattern = "*"  # bug in cmd loop
+        # if users enters nothing, search for all
 
         patient_list = self.DB.patient_list(pattern)
 
@@ -125,15 +124,23 @@ class MainShell(CommandShell):
 
         print("\nResults: " + str(len(patient_list)))
 
-        return
-
     def do_dbinfo(self, arg):
         """Print information about the database.
         Including: number of patients in database."""
 
+        # number of patients in database
+        # number of patients with CHUS as chart
+        # number of patients with CMRF as chart
+
         npatients = str(len(self.DB.patient_list("*")))
 
-        info = "Number of patients in database: " + npatients
+        chus_patients = str(len(self.DB.patient_list("CHUS")))
+        cmrf_patients = str(len(self.DB.patient_list("CMRF")))
+
+        info = "Number of patients in database: " + npatients + "\n" + \
+               "Number of patients at CHUS: " + chus_patients + "\n" + \
+               "Number of patients at CMRF: " + cmrf_patients
+
         print(info)
 
     def do_new(self, arg):
@@ -165,16 +172,22 @@ class MainShell(CommandShell):
             # make sure we have a patient
             if self.patient_object == None:
                 print("Must choose a patient first")
-                return
+                return  # we don't have a chosen patient so we return
 
             # ask if for today or another date
-            note_date_str = input("Enter date: (Return for today)")
+            note_date_str = input("Enter date: (Return for today) (Format: dd.mm.yyyy) ")
 
             # default is today
             if note_date_str == "":
                 note_date_str = \
                     str(datetime.today().strftime("%d.%m.%Y")) + ".note"
             else:
+                # TODO: verify that the input date is valid
+                try:
+                    chosen_date = datetime.strptime(note_date_str, "%d.%m.%Y")
+                except:
+                    print(note_date_str + " is not a valid date or in wrong format.")
+                    return
                 note_date_str += ".note"
 
             self.patient_object.new_note(note_date_str)
@@ -233,7 +246,9 @@ class MainShell(CommandShell):
     def do_notes(self, arg):
         """Select from list of notes for selected patient."""
 
-        if self.patient_UID is not None:
+        if self.patient_UID is None:
+            print("No patient selected")
+        else:
             counter = 0
 
             # note_list is a list of tuples (numeric date value (sorted) and
@@ -245,12 +260,14 @@ class MainShell(CommandShell):
                 print("["+str(counter)+"] "+ note[1])
 
             choice = input("Select note: ")
-            lookup_value = int(choice) -1
-            chosen_note_string = note_list[lookup_value][1]
 
+            try:  # lookup choice
+                lookup_value = int(choice) - 1
+            except:  # if invalid selection ===> return the last one
+                lookup_value = len(note_list) - 1
+
+            chosen_note_string = note_list[lookup_value][1]  # second in tuple
             self.patient_object.edit_note(chosen_note_string)
-        else:
-            print("No patient selected")
 
     def do_interact(self, arg):
         """Drop into Python interpreter"""
@@ -270,15 +287,21 @@ class MainShell(CommandShell):
     def do_meds(self, arg):
         """Show patient medication list."""
         if self.patient_UID is not None:
-            print("\nCurrent medication list\n")
-            print(self.patient_object.meds)
-        return
+            print("\nCurrent medication list:\n")
+            print(self.patient_object.meds + "\n")
 
     def do_info(self, arg):
         """Show info on the selected patient"""
-        if self.patient_UID is not None:
-            print(self.patient_object.contact_info)
-        return
+        if self.patient_UID is None:
+            print("No patient selected")
+        else:
+            support.clearScreen()
+            print_bold("Contact info: ")
+            print(" " + self.patient_object.contact_info.replace("\n", "\n "))
+            print_bold("Atcd: ")
+            print(self.patient_object.atcd + "\n")
+            print_bold("Meds:")
+            print(self.patient_object.meds)
 
     def do_listp(self, arg):
         """List properties of patient object."""
@@ -319,19 +342,37 @@ class MainShell(CommandShell):
         elif arg.lower() == "all":
             self.patient_object.edit()
 
-        return
-
     def do_print(self, arg):
         """Print information from currently selected patient's chart."""
-        if self.patient_UID is not None:
-            print("Printing " + self.patient_UID)
-        return
+
+        if self.patient_UID is None:
+            print("No patient selected")
+        else:
+            counter = 0
+
+            # note_list is a list of tuples (numeric date value (sorted) and
+            # the title of the note for that date
+            note_list = self.patient_object.patient_note_list()
+
+            for note in note_list:
+                counter += 1
+                print("[" + str(counter) + "] " + note[1])
+
+            choice = input("Select note: ")
+
+            try:  # lookup choice
+                lookup_value = int(choice) - 1
+            except:  # if invalid selection ===> return the last one
+                lookup_value = len(note_list) - 1
+
+            chosen_note_string = note_list[lookup_value][1]  # second in tuple
+            self.patient_object.print_note(chosen_note_string)
+
 
     def do_clip(self, arg):
         """Clip parts of patient chart to system clipboard."""
         if self.patient_UID is not None:
             print("Clipping " + self.patient_UID)
-        return
 
     def do_files(self, arg):
         """Execute the ranger file manager on the currently selected patient."""
@@ -382,12 +423,12 @@ class MainShell(CommandShell):
         if UID is None:
             self.patient_UID = None
             self.patient_object = None
-            self.prompt = self.PLAIN_PROMPT
+            self.prompt = support.bold_str(self.PLAIN_PROMPT)
         else:
             self.patient_UID = UID
             self.patient_object = pObj.PatientObject(self.patient_UID, self.DB)
             print("Selected: " + self.patient_UID + "\n")
-            self.prompt = self.patient_UID + " > "
+            self.prompt = support.bold_str(self.patient_UID + " > ")
         return
 
     def reload_patient(self):

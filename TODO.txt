@@ -4,8 +4,6 @@ Things to do:
 *** Fix printing of notes
     As of 15.01.2016 I am not able to print notes
 
-*** Create new note for today
-    As of 15.01.2016 → I cannot create new note for today
 
 *** Shutdown option to offer to unmount the data directory
 
@@ -29,3 +27,7 @@ Done or resolved:
     from Yaemrs. The program just points to the directory with the data, that's it.
     Mounting and securing the data will not be part of it for now because it's too variable
     from Mac to Linux.
+
+--- Create new note for today
+    As of 15.01.2016 → I cannot create new note for today
+    ==> 25.02.2016 ok now note can be created by choosing "e"

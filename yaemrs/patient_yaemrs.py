@@ -580,7 +580,7 @@ class PatientObject():
         # get first 10 chars of filename
         date_string = filename[0:10]
 
-        with open('/home/doc/Clinic/Other/Templates/patient.note','r') as fh:
+        with open(self.patient_template, 'r') as fh:
             basic_note = fh.read()
 
         note_to_be_written = self.notes_path + "/" + date_string + ".note"
@@ -614,6 +614,10 @@ class PatientObject():
         file_to_edit = self.notes_path + "/" + filename
         command_string = editor + file_to_edit
         subprocess.call(command_string, shell=True)
+
+    def print_note(self, filename):
+        file_to_print = self.notes_path + "/" + filename
+        s.pdf_print(file_to_print)
 
     def edit(self, arg=""):
         """Method to call the editor on patient files."""

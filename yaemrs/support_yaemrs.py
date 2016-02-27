@@ -22,8 +22,44 @@ from tempfile import NamedTemporaryFile
 #from pudb import set_trace
 # lots of magic via sh module (makes my life much easier)
 from sh import tmux
+import subprocess
 # import pudb
 
+
+class color:
+    PURPLE = '\033[95m'
+    CYAN = '\033[96m'
+    DARKCYAN = '\033[36m'
+    BLUE = '\033[94m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    END = '\033[0m'
+
+
+def pdf_print(filename):
+    PRINT_COMMAND = " | paps --font='Courrier 10' --left-margin=72 --paper=letter | ps2pdf - test.pdf"
+
+    command_string = "cat " + filename + PRINT_COMMAND
+    subprocess.call(command_string, shell=True)
+
+
+def bold_str(text):
+    return color.BOLD + text + color.END
+
+
+def print_bold(text):
+    print(bold_str(text))
+
+
+def find(path, pattern):
+    # small function to search current dir for pattern
+    import sh
+    command = "-iname"
+
+    return (sh.find(path, "-maxdepth", "1", command, pattern))
 
 def obligatory_input(prompt="", times=3):
     """Loop until a non-empty string is input
@@ -33,7 +69,6 @@ def obligatory_input(prompt="", times=3):
     reply = ""
     while reply == "":
         counter += 1
-        print("Counter = ", counter)
         if counter > times: break
         reply = input(prompt)
     return reply

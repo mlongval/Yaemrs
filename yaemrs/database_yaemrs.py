@@ -197,7 +197,7 @@ class PatientDB:
 
         # check for clinic validity
         if clinic.upper() not in self.clinics.split(","):
-            raise ValueError("Clinic name is invaid")
+            raise ValueError("Clinic name is invalid")
 
         new_patient_UID += chart + "." + clinic.upper()
 
@@ -287,34 +287,39 @@ class PatientDB:
 
     # PUBLIC METHODS GO HERE
 
+
     def patient_list(self, pattern: str="*") -> list:
         """Returns a list containing all the patients in the directory defined
         by self.patients_data_dir
         """
+
         # correct the user supplied pattern to make sure it contains a leading
         # and trailing * (best way to do this is strip off any that may be
         # there and then add more
         pattern = ("*" + pattern.strip("*") + "*").replace("**","*")
 
-#        set_trace()
-
         # the expanduser() call just expands any "~" refs in
         # self.patients_data_dir
         path_object = pathlib.Path(self.patients_data_dir).expanduser()
 
-        # return full_path_list contains FULLY exanded POSIX paths
-        # but using .glob(pattern) to narrow search
-        full_path_list = list(path_object.glob(pattern))
+        # this splits the output of find command and removes the last element
+        # which is an empty line
+        full_path_list = (sf.find(str(path_object), pattern)).split("\n")[:-1]
 
-        # full_path_list is a list of path objects therefor
-        # apply .name to return only the local file name
-        filename_list = [directory.name for directory in full_path_list]
+        filename_list = []
+
+        for directory in full_path_list:
+            filename_list.append(pathlib.Path(directory).name)
+
+        filename_list.sort()
 
         # this is an fugly hack to fix a "FEATURE/BUG" in MacOSX
-        # the damn Finder always adds 'DS_Store' files in direcotries
+        # the damn Finder always adds 'DS_Store' files in directories
         # so I have to remove it.
+
         return [filename for filename in filename_list
-                if "DS_Store".upper() not in filename.upper()]
+                if ("DS_Store".upper() not in filename.upper())]
+
 
     def new_patient(self, fname: str, lname: str, HIN: str,
                     chart: str, clinic: str) -> str:
